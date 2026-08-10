@@ -20,15 +20,9 @@ export async function POST(request: Request) {
     const date = String(body.date).trim();
     const time = String(body.time).trim();
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return Response.json({ error: "Correo inválido." }, { status: 400 });
-    }
-    if (!/^(\+?56)?\s?9\s?\d{4}\s?\d{4}$/.test(phone)) {
-      return Response.json({ error: "Teléfono inválido. Usa un número chileno válido." }, { status: 400 });
-    }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) {
-      return Response.json({ error: "Fecha u horario inválido." }, { status: 400 });
-    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ error: "Correo inválido." }, { status: 400 });
+    if (!/^(\+?56)?\s?9\s?\d{4}\s?\d{4}$/.test(phone)) return Response.json({ error: "Teléfono inválido. Usa un número chileno válido." }, { status: 400 });
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return Response.json({ error: "Fecha u horario inválido." }, { status: 400 });
 
     const availability = await getAvailabilityForDate(date);
     if (!availability.available || !availability.slots.some((slot) => slot.time_24 === time)) {
@@ -45,7 +39,15 @@ export async function POST(request: Request) {
 
     if (serviceError || !service) return Response.json({ error: "Servicio no disponible." }, { status: 400 });
 
-    const config = await getPublicConfig();
+    // The reservation must not depend on the public configuration endpoint.
+    // This keeps a configuration/schema mismatch from blocking a valid booking.
+    let barberName: string | undefined;
+    try {
+      const configResult = await getPublicConfig();
+      barberName = configResult.data?.settings?.barber_name;
+    } catch (configError) {
+      console.error("Could not load barber configuration for reservation email:", configError);
+    }
 
     const { data: reservation, error } = await supabase.from("reservations").insert({
       service_id: service.id,
@@ -67,6 +69,8 @@ export async function POST(request: Request) {
       throw error;
     }
 
+    let emailSent = false;
+    let warning: string | undefined;
     try {
       await sendReservationEmail(email, {
         firstName: String(body.firstName).trim(),
@@ -75,16 +79,18 @@ export async function POST(request: Request) {
         time,
         price: service.price,
         observations: body.observations,
-        barberName: config.settings.barber_name,
+        barberName,
       });
+      emailSent = true;
     } catch (emailError) {
       console.error("Reservation created but confirmation email failed:", emailError);
-      return Response.json({ reservation, emailSent: false, warning: "La reserva fue creada, pero no pudimos enviar el correo de confirmación." }, { status: 201 });
+      warning = "La reserva fue creada correctamente, pero no pudimos enviar el correo de confirmación. Revisa la configuración SMTP.";
     }
 
-    return Response.json({ reservation, emailSent: true }, { status: 201 });
+    // Always return success after Supabase has created the reservation.
+    return Response.json({ reservation, emailSent, warning }, { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.error("Reservation request failed:", error);
     return Response.json({ error: "No se pudo crear la reserva." }, { status: 500 });
   }
 }
