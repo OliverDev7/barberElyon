@@ -45,8 +45,7 @@ export async function POST(request: Request) {
 
     if (serviceError || !service) return Response.json({ error: "Servicio no disponible." }, { status: 400 });
 
-    const { data: config, error: configError } = await getPublicConfig();
-    if (configError) return Response.json({ error: "No se pudo cargar la configuración." }, { status: 500 });
+    const config = await getPublicConfig();
 
     const { data: reservation, error } = await supabase.from("reservations").insert({
       service_id: service.id,
