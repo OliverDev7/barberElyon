@@ -22,10 +22,13 @@ export function createAdminSessionValue() {
 export function isValidAdminSession(value?: string) {
   if (!value) return false;
   const [role, expires, signature] = value.split(".");
-  const payload = `${role}.${expires}`;
-  const legacyPayload = `${role}:${expires}`;
-  const expected = sign(legacyPayload);
-  return role === "admin" && Number(expires) > Date.now() && signature === expected && payload.length > 0;
+  if (role !== "admin" || !expires || !signature) return false;
+
+  const payload = `${role}:${expires}`;
+  const expected = sign(payload);
+  const signaturesMatch = crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+
+  return Number.isFinite(Number(expires)) && Number(expires) > Date.now() && signaturesMatch;
 }
 
 export async function requireAdmin() {
