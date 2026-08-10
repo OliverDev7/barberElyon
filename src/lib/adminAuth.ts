@@ -23,31 +23,24 @@ export function isValidAdminSession(value?: string) {
   if (!value) return false;
   const [role, expires, signature] = value.split(".");
   if (role !== "admin" || !expires || !signature) return false;
-
   const payload = `${role}:${expires}`;
   const expected = sign(payload);
-  const signaturesMatch = crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
-
-  return Number.isFinite(Number(expires)) && Number(expires) > Date.now() && signaturesMatch;
+  const received = Buffer.from(signature, "utf8");
+  const expectedBuffer = Buffer.from(expected, "utf8");
+  if (received.length !== expectedBuffer.length) return false;
+  const signaturesMatch = crypto.timingSafeEqual(received, expectedBuffer);
+  return /^\d+$/.test(expires) && Number(expires) > Date.now() && signaturesMatch;
 }
 
 export async function requireAdmin() {
   const cookieStore = await cookies();
   const session = cookieStore.get(cookieName)?.value;
-  if (!isValidAdminSession(session)) {
-    throw new Error("Unauthorized");
-  }
+  if (!isValidAdminSession(session)) throw new Error("Unauthorized");
 }
 
 export async function setAdminCookie(value: string) {
   const cookieStore = await cookies();
-  cookieStore.set(cookieName, value, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 8,
-  });
+  cookieStore.set(cookieName, value, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 8 });
 }
 
 export async function clearAdminCookie() {
