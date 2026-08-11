@@ -76,108 +76,118 @@ section[class~="sm:rounded-b-none"] {
 }
 
 section[class~="sm:rounded-b-none"] > div:first-child {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 2;
+  position: absolute; top: 8px; right: 8px; z-index: 2;
 }
-
-section[class~="sm:rounded-b-none"] > div:first-child button {
-  width: 34px;
-  height: 34px;
-  background: #f5f6f6;
-  font-size: 16px;
-}
-
-section[class~="sm:rounded-b-none"] > div:nth-child(2) {
-  margin-top: 0 !important;
-}
-
+section[class~="sm:rounded-b-none"] > div:first-child button { width: 34px; height: 34px; background: #f5f6f6; font-size: 16px; }
+section[class~="sm:rounded-b-none"] > div:nth-child(2) { margin-top: 0 !important; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) > div {
-  width: 100% !important;
-  max-width: none !important;
-  padding: 4px 0 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 22px;
+  width: 100% !important; max-width: none !important; padding: 4px 0 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+  display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px;
 }
+section[class~="sm:rounded-b-none"] > div:nth-child(2) > div > div { min-width: 0; }
+section[class~="sm:rounded-b-none"] > div:nth-child(2) h3 { max-width: 100%; padding-right: 28px; font-size: 16px; line-height: 1.25; }
+section[class~="sm:rounded-b-none"] > div:nth-child(2) p { margin-top: 5px; font-size: 12px; line-height: 1.35; }
+section[class~="sm:rounded-b-none"] > div:nth-child(2) button { min-width: 126px; min-height: 38px; width: auto; white-space: nowrap; border-radius: 7px; font-size: 13px; padding: 9px 16px; }
+section[class~="sm:rounded-b-none"]::after { content: "Desarrollado por  ▪ AgendaPro"; display: block; margin-top: 7px; text-align: center; font-size: 9px; line-height: 1; color: #9aa3a1; }
 
-section[class~="sm:rounded-b-none"] > div:nth-child(2) > div > div {
-  min-width: 0;
-}
-
-section[class~="sm:rounded-b-none"] > div:nth-child(2) h3 {
-  max-width: 100%;
-  padding-right: 28px;
-  font-size: 16px;
-  line-height: 1.25;
-}
-
-section[class~="sm:rounded-b-none"] > div:nth-child(2) p {
-  margin-top: 5px;
-  font-size: 12px;
-  line-height: 1.35;
-}
-
-section[class~="sm:rounded-b-none"] > div:nth-child(2) button {
-  min-width: 126px;
-  min-height: 38px;
-  width: auto;
-  white-space: nowrap;
-  border-radius: 7px;
-  font-size: 13px;
-  padding: 9px 16px;
-}
-
-section[class~="sm:rounded-b-none"]::after {
-  content: "Desarrollado por  ▪ AgendaPro";
-  display: block;
-  margin-top: 7px;
-  text-align: center;
-  font-size: 9px;
-  line-height: 1;
-  color: #9aa3a1;
-}
-
+/* Mobile calendar: compact seven-day picker */
 @media (max-width: 767px) {
-  article.group.flex.min-h-\[300px\] {
-    min-height: 0;
+  article.group.flex.min-h-\[300px\] { min-height: 0; }
+
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] {
+    grid-template-columns: 24px minmax(0, 1fr) 24px !important;
+    gap: 2px !important;
   }
 
-  .fixed.inset-0.z-50.grid.place-items-end:has(> section[class~="sm:rounded-b-none"]) {
-    padding: 0 12px 14px;
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > button {
+    width: 24px !important;
+    height: 48px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    font-size: 27px !important;
+    line-height: 1 !important;
+    color: #26343b !important;
   }
 
-  section[class~="sm:rounded-b-none"] {
-    width: min(100%, 520px) !important;
-    padding: 14px 18px 10px !important;
-    border-radius: 16px !important;
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > button:disabled { opacity: .18 !important; }
+
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] {
+    gap: 2px !important;
   }
 
-  section[class~="sm:rounded-b-none"] > div:nth-child(2) > div {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 12px;
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button {
+    width: 100% !important;
+    height: 70px !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 7px 1px 6px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    transform: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
   }
 
-  section[class~="sm:rounded-b-none"] > div:nth-child(2) h3 {
-    font-size: 14px;
-    padding-right: 20px;
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:first-child {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 11px !important;
+    line-height: 14px !important;
+    font-weight: 700 !important;
+    color: #4b5559 !important;
   }
 
-  section[class~="sm:rounded-b-none"] > div:nth-child(2) p {
-    font-size: 11px;
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(2) {
+    margin-top: 4px !important;
+    font-size: 22px !important;
+    line-height: 22px !important;
+    font-weight: 900 !important;
+    color: #26343b !important;
   }
 
-  section[class~="sm:rounded-b-none"] > div:nth-child(2) button {
-    min-width: 112px;
-    min-height: 38px;
-    padding: 9px 13px;
-    font-size: 12px;
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(3) {
+    display: none !important;
   }
+
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"] {
+    position: relative !important;
+    background: #26343b !important;
+    color: #fff !important;
+    box-shadow: 0 7px 14px -10px rgba(38, 52, 59, .65) !important;
+  }
+
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"] > span:first-child,
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"] > span:nth-child(2) {
+    color: #fff !important;
+  }
+
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"]::after {
+    content: ""; position: absolute; left: 50%; bottom: -5px; width: 7px; height: 7px;
+    border-radius: 999px; background: #26343b; transform: translateX(-50%);
+  }
+
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] + p { display: none !important; }
+
+  section[class*="animate-[step-in"] div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(2) {
+    font-size: 21px !important;
+  }
+
+  .fixed.inset-0.z-50.grid.place-items-end:has(> section[class~="sm:rounded-b-none"]) { padding: 0 12px 14px; }
+  section[class~="sm:rounded-b-none"] { width: min(100%, 520px) !important; padding: 14px 18px 10px !important; border-radius: 16px !important; }
+  section[class~="sm:rounded-b-none"] > div:nth-child(2) > div { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+  section[class~="sm:rounded-b-none"] > div:nth-child(2) h3 { font-size: 14px; padding-right: 20px; }
+  section[class~="sm:rounded-b-none"] > div:nth-child(2) p { font-size: 11px; }
+  section[class~="sm:rounded-b-none"] > div:nth-child(2) button { min-width: 112px; min-height: 38px; padding: 9px 13px; font-size: 12px; }
+}
+
+@media (max-width: 359px) {
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] { grid-template-columns: 20px minmax(0, 1fr) 20px !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > button { width: 20px !important; font-size: 24px !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] { gap: 0 !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button { height: 66px !important; padding-left: 0 !important; padding-right: 0 !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:first-child { font-size: 9px !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(2) { font-size: 20px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
