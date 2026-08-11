@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     let warning: string | undefined;
     try {
       const siteUrl = new URL(request.url).origin;
-      await sendReservationEmail(email, { firstName, lastName, serviceName: service.name, date, time, price: service.price, observations: body.observations, barberName }, siteUrl);
+      await sendReservationEmail(email, { firstName, lastName, serviceName: service.name, date, time, barberName }, siteUrl);
       emailSent = true;
     } catch (emailError) {
       console.error("Reservation created but confirmation email failed:", emailError);
