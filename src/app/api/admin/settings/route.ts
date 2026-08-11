@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/adminAuth";
+import { requireAdminApi } from "@/lib/adminAuth";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 export const dynamic = "force-dynamic";
@@ -6,14 +6,16 @@ export const dynamic = "force-dynamic";
 const editableFields = ["business_name", "barber_name", "location_city", "address", "google_maps_embed_url", "whatsapp_phone"] as const;
 
 export async function GET() {
-  await requireAdmin();
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
   const { data, error } = await getSupabaseAdmin().from("business_settings").select("*").limit(1).single();
   if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json({ settings: data });
 }
 
 export async function PATCH(request: Request) {
-  await requireAdmin();
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
   const body = await request.json();
   const changes = Object.fromEntries(editableFields.filter((field) => body[field] !== undefined).map((field) => [field, typeof body[field] === "string" ? body[field].trim() : body[field]]));
   if (Object.keys(changes).length === 0) return Response.json({ error: "No hay cambios válidos." }, { status: 400 });
