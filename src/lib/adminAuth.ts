@@ -13,9 +13,7 @@ export class AdminUnauthorizedError extends Error {
 
 function getSecret() {
   const secret = process.env.ADMIN_SESSION_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error("ADMIN_SESSION_SECRET must contain at least 32 characters.");
-  }
+  if (!secret || secret.length < 32) throw new Error("ADMIN_SESSION_SECRET must contain at least 32 characters.");
   return secret;
 }
 
@@ -58,6 +56,11 @@ export async function hasValidAdminSession() {
 
 export async function requireAdmin() {
   if (!(await hasValidAdminSession())) throw new AdminUnauthorizedError();
+}
+
+export async function requireAdminApi() {
+  if (await hasValidAdminSession()) return null;
+  return Response.json({ error: "Sesión de administrador no válida o expirada." }, { status: 401 });
 }
 
 export async function setAdminCookie(value: string) {
