@@ -29,6 +29,8 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.font-display { font-family: var(--font-display), Arial, sans-serif; }
+
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 img, svg, video, iframe { max-width: 100%; }
@@ -62,5 +64,11 @@ input, select, textarea { min-width: 0; max-width: 100%; }
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+}
+
+@media (max-width: 767px) {
+  article.group.flex.min-h-\[300px\] {
+    min-height: 0;
   }
 }
