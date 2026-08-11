@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/adminAuth";
+import { requireAdminApi } from "@/lib/adminAuth";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 export const dynamic = "force-dynamic";
@@ -18,14 +18,16 @@ function servicePayload(body: Record<string, unknown>) {
 }
 
 export async function GET() {
-  await requireAdmin();
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
   const { data, error } = await getSupabaseAdmin().from("services").select("*").order("sort_order").order("created_at");
   if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json({ services: data });
 }
 
 export async function POST(request: Request) {
-  await requireAdmin();
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
   try {
     const payload = servicePayload(await request.json());
     const { data, error } = await getSupabaseAdmin().from("services").insert(payload).select().single();
@@ -37,7 +39,8 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  await requireAdmin();
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
   try {
     const body = await request.json();
     if (typeof body.id !== "string" || !body.id) return Response.json({ error: "ID requerido." }, { status: 400 });
@@ -51,7 +54,8 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  await requireAdmin();
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
   const id = new URL(request.url).searchParams.get("id");
   if (!id) return Response.json({ error: "ID requerido." }, { status: 400 });
   const { error } = await getSupabaseAdmin().from("services").delete().eq("id", id);
