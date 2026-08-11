@@ -1,7 +1,44 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 import { BrandMark, Button, Panel } from "./ui";
 
 export function AdminLoginMock() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error ?? "No se pudo iniciar sesión.");
+        return;
+      }
+
+      router.replace("/admin");
+      router.refresh();
+    } catch {
+      setError("No se pudo conectar con el servidor. Inténtalo nuevamente.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className="grid min-h-screen place-items-center bg-[#f7faf8] px-4 py-10 text-neutral-950">
       <section className="w-full max-w-md">
@@ -9,23 +46,21 @@ export function AdminLoginMock() {
         <Panel className="mt-8">
           <p className="text-sm font-black uppercase tracking-[0.22em] text-teal-950">Panel Admin</p>
           <h1 className="mt-3 font-serif text-4xl font-bold">Ingreso del barbero</h1>
-          <p className="mt-3 text-sm leading-6 text-neutral-500">
-            Acceso visual exclusivo para que el barbero gestione datos y agenda en una futura version.
-          </p>
-          <div className="mt-6 grid gap-4">
+          <p className="mt-3 text-sm leading-6 text-neutral-500">Accede al centro de control de ELYON BARBER para gestionar reservas, servicios y disponibilidad.</p>
+
+          <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
             <label className="grid gap-2 text-sm font-bold text-neutral-700">
               Correo
-              <input className="focus-ring min-h-12 rounded-lg border border-neutral-200 bg-white px-4" placeholder="barbero@elyonbarber.cl" />
+              <input className="focus-ring min-h-12 rounded-lg border border-neutral-200 bg-white px-4" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" type="email" required />
             </label>
             <label className="grid gap-2 text-sm font-bold text-neutral-700">
-              Contrasena
-              <input className="focus-ring min-h-12 rounded-lg border border-neutral-200 bg-white px-4" placeholder="••••••••" type="password" />
+              Contraseña
+              <input className="focus-ring min-h-12 rounded-lg border border-neutral-200 bg-white px-4" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" type="password" required />
             </label>
-            <Button>Ingresar al panel</Button>
-            <Link className="text-center text-sm font-bold text-teal-950" href="/reservar/elyon-barber">
-              Volver a reservas
-            </Link>
-          </div>
+            {error && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{error}</p>}
+            <Button type="submit" disabled={loading}>{loading ? "Ingresando..." : "Ingresar al panel"}</Button>
+            <Link className="text-center text-sm font-bold text-teal-950" href="/reservar/elyon-barber">Volver a reservas</Link>
+          </form>
         </Panel>
       </section>
     </main>
