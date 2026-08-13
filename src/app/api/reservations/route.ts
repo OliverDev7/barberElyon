@@ -1,5 +1,6 @@
 import { getAvailabilityForDate, getPublicConfig } from "@/lib/data";
 import { sendReservationEmail } from "@/lib/email";
+import { sendBarberNotificationEmail } from "@/lib/barberNotificationEmail";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,7 @@ export async function POST(request: Request) {
     const time = String(body.time).trim();
     const firstName = String(body.firstName).trim();
     const lastName = String(body.lastName).trim();
+    const observations = typeof body.observations === "string" && body.observations.trim() ? body.observations.trim() : null;
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ error: "Correo inválido." }, { status: 400 });
     if (!/^(\+?56)?\s?9\s?\d{4}\s?\d{4}$/.test(phone)) return Response.json({ error: "Teléfono inválido. Usa un número chileno válido." }, { status: 400 });
@@ -47,7 +49,7 @@ export async function POST(request: Request) {
       last_name: lastName,
       email,
       phone,
-      observations: typeof body.observations === "string" && body.observations.trim() ? body.observations.trim() : null,
+      observations,
       status: "confirmed",
     }).select().single();
 
@@ -63,11 +65,33 @@ export async function POST(request: Request) {
       await sendReservationEmail(email, { firstName, lastName, serviceName: service.name, date, time, barberName }, siteUrl);
       emailSent = true;
     } catch (emailError) {
-      console.error("Reservation created but confirmation email failed:", emailError);
+      console.error("Reservation created but customer confirmation email failed:", emailError);
       warning = "La reserva fue creada correctamente, pero no pudimos enviar el correo de confirmación. Revisa la configuración SMTP.";
     }
 
-    return Response.json({ reservation, emailSent, warning }, { status: 201 });
+    let barberEmailSent = false;
+    const barberNotificationEmail = process.env.BARBER_NOTIFICATION_EMAIL?.trim() || process.env.ADMIN_EMAIL?.trim() || "";
+    if (barberNotificationEmail) {
+      try {
+        await sendBarberNotificationEmail(barberNotificationEmail, {
+          firstName,
+          lastName,
+          phone,
+          serviceName: service.name,
+          date,
+          time,
+          barberName,
+          observations,
+        });
+        barberEmailSent = true;
+      } catch (barberEmailError) {
+        console.error("Reservation created but barber notification email failed:", barberEmailError);
+      }
+    } else {
+      console.warn("Barber notification email is not configured. Set BARBER_NOTIFICATION_EMAIL or use ADMIN_EMAIL.");
+    }
+
+    return Response.json({ reservation, emailSent, barberEmailSent, warning }, { status: 201 });
   } catch (error) {
     console.error("Reservation request failed:", error);
     return Response.json({ error: "No se pudo crear la reserva." }, { status: 500 });
