@@ -81,8 +81,6 @@ export async function POST(request: Request) {
           date,
           time,
           barberName,
-          clientNumber: reservation.id,
-          observations,
         });
         barberEmailSent = true;
       } catch (barberEmailError) {
