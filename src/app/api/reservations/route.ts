@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     const lastName = String(body.lastName).trim();
     const observations = typeof body.observations === "string" && body.observations.trim() ? body.observations.trim() : null;
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ error: "Correo inválido." }, { status: 400 });
+    if (!/^([^\s@]+)@([^\s@]+)\.[^\s@]+$/.test(email)) return Response.json({ error: "Correo inválido." }, { status: 400 });
     if (!/^(\+?56)?\s?9\s?\d{4}\s?\d{4}$/.test(phone)) return Response.json({ error: "Teléfono inválido. Usa un número chileno válido." }, { status: 400 });
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return Response.json({ error: "Fecha u horario inválido." }, { status: 400 });
 
@@ -80,6 +80,7 @@ export async function POST(request: Request) {
           serviceName: service.name,
           date,
           time,
+          observations,
           barberName,
         });
         barberEmailSent = true;
