@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 
+// Reemplaza estos valores por los enlaces definitivos de Elyon Barber Studio.
+const SOCIAL_LINKS = {
+  instagram: "#",
+  whatsapp: "#",
+};
+
 export function BrandMark({ dark = false }: { dark?: boolean }) {
   return <div className="flex items-center gap-3"><div className={`grid h-10 w-10 place-items-center rounded-full border ${dark ? "border-white/20 bg-white" : "border-teal-100 bg-teal-50"} text-[11px] font-black ${dark ? "text-teal-950" : "text-teal-950"}`}>EB</div><div><p className="text-sm font-black tracking-[0.18em] text-current">ELYON BARBER</p><p className="text-xs text-neutral-500">Reservas premium</p></div></div>;
 }
@@ -15,6 +21,14 @@ export function DarkPanel({ children, className = "" }: { children: ReactNode; c
 export function AdminLink({ href, children, onClick }: { href: string; children: ReactNode; onClick?: () => void }) { return <Link className="rounded-xl px-3 py-2.5 text-sm font-semibold text-neutral-600 transition hover:bg-teal-50 hover:text-teal-950" href={href} onClick={onClick}>{children}</Link>; }
 export function StatusPill({ children, tone = "gold" }: { children: ReactNode; tone?: "gold" | "green" | "red" | "gray" }) { const tones = { gold: "bg-teal-50 text-teal-950", green: "bg-emerald-100 text-emerald-800", red: "bg-red-100 text-red-800", gray: "bg-neutral-100 text-neutral-700" }; return <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${tones[tone]}`}>{children}</span>; }
 
+function InstagramIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" className="fill-current stroke-none" /></svg>;
+}
+
+function WhatsAppIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8"><path d="M20.2 11.5a8.2 8.2 0 0 1-12.1 7.2L4 20l1.3-3.8A8.2 8.2 0 1 1 20.2 11.5Z" /><path d="M9.2 8.6c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.6 1.5c.1.2.1.4-.1.6l-.6.7c-.1.1-.1.3 0 .4.5.9 1.3 1.6 2.2 2.1.2.1.3.1.4-.1l.7-.8c.1-.2.3-.2.5-.1l1.5.7c.2.1.3.3.3.5 0 .7-.3 1.2-.8 1.4-.5.2-1.1.1-1.7-.1-2.8-1-4.8-3-5.8-5.8-.2-.6-.2-1.2.1-1.9Z" /></svg>;
+}
+
 export function PublicFooter() {
-  return <footer className="border-t border-teal-100 bg-white px-4 py-10 sm:px-6"><div className="mx-auto grid max-w-6xl gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-start"><div><BrandMark /><p className="mt-4 max-w-sm text-sm leading-6 text-neutral-500">Una experiencia de barbería pensada para que reserves tu próxima visita de forma simple y cómoda.</p></div><div><p className="text-xs font-black uppercase tracking-[0.18em] text-teal-950">Información</p><nav className="mt-3 grid gap-2"><Link className="w-fit text-sm font-semibold text-neutral-600 transition hover:text-teal-950" href="/politicas-de-uso">Política de privacidad</Link><Link className="w-fit text-sm font-semibold text-neutral-600 transition hover:text-teal-950" href="/terminos-y-condiciones">Condiciones de servicio</Link></nav></div></div><div className="mx-auto mt-8 max-w-6xl border-t border-neutral-100 pt-5 text-center text-[11px] font-bold uppercase tracking-[0.12em] text-neutral-400">© 2026 ELYON BARBER. Todos los derechos reservados.</div></footer>;
+  return <footer className="border-t border-teal-100 bg-white px-4 py-12 sm:px-6 sm:py-14"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.2fr_1fr_1fr] lg:gap-12"><div><BrandMark /><p className="mt-5 max-w-md text-sm leading-7 text-neutral-500">Una experiencia de barbería pensada para que reserves tu próxima visita de forma simple, cómoda y con el estilo de ELYON BARBER.</p><div className="mt-6 flex flex-wrap gap-3"><a href={SOCIAL_LINKS.instagram} target="_blank" rel="noreferrer" aria-label="Instagram de ELYON BARBER" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm font-bold text-neutral-700 transition hover:-translate-y-0.5 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-950"><InstagramIcon /> Instagram</a><a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp de ELYON BARBER" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm font-bold text-neutral-700 transition hover:-translate-y-0.5 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-950"><WhatsAppIcon /> WhatsApp</a></div></div><div><p className="text-xs font-black uppercase tracking-[0.18em] text-teal-950">Información</p><nav className="mt-4 grid gap-3"><Link className="w-fit text-sm font-semibold text-neutral-600 transition hover:text-teal-950" href="/politicas-de-uso">Política de privacidad</Link><Link className="w-fit text-sm font-semibold text-neutral-600 transition hover:text-teal-950" href="/terminos-y-condiciones">Condiciones de servicio</Link></nav></div><div className="rounded-2xl border border-teal-100 bg-teal-50/60 p-5 sm:p-6"><p className="text-xs font-black uppercase tracking-[0.18em] text-teal-950">Una palabra de esperanza</p><blockquote className="mt-4 font-display text-lg font-bold leading-7 text-neutral-900">“Y el Dios de esperanza os llene de todo gozo y paz en el creer, para que abundéis en esperanza.”</blockquote><p className="mt-3 text-xs font-black uppercase tracking-[0.12em] text-neutral-500">Romanos 15:13</p></div></div><div className="mx-auto mt-10 max-w-6xl border-t border-neutral-100 pt-5 text-center text-[11px] font-bold uppercase tracking-[0.12em] text-neutral-400">© 2026 ELYON BARBER. Todos los derechos reservados.</div></footer>;
 }
