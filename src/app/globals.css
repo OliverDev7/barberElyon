@@ -88,7 +88,9 @@ section[class~="sm:rounded-b-none"] > div:nth-child(2) > div > div { min-width: 
 section[class~="sm:rounded-b-none"] > div:nth-child(2) h3 { max-width: 100%; padding-right: 28px; font-size: 16px; line-height: 1.25; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) p { margin-top: 5px; font-size: 12px; line-height: 1.35; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) button { min-width: 126px; min-height: 38px; width: auto; white-space: nowrap; border-radius: 7px; font-size: 13px; padding: 9px 16px; }
-section[class~="sm:rounded-b-none"]::after { content: "Desarrollado por  ▪ AgendaPro"; display: block; margin-top: 7px; text-align: center; font-size: 9px; line-height: 1; color: #9aa3a1; }
+
+section[class~="sm:rounded-b-none"]::after { content: "Desarrollado por  ▪ BS"; display: block; margin-top: 7px; text-align: center; font-size: 9px; line-height: 1; color: #9aa3a1; }
+
 
 /* Mobile calendar: compact seven-day picker */
 @media (max-width: 767px) {
@@ -197,4 +199,8 @@ main > section:first-of-type aside h1::before { font-size: clamp(2.35rem, 5vw, 4
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 05ae99d (Se suben cambios)

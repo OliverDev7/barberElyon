@@ -105,3 +105,4 @@ export async function sendBarberNotificationEmail(to: string, data: BarberNotifi
   await transporter.verify();
   await transporter.sendMail({ from: process.env.SMTP_FROM ?? process.env.SMTP_USER, to, subject: "Nueva reserva", html: barberNotificationEmailHtml(data) });
 }
+

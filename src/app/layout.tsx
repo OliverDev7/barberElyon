@@ -7,7 +7,7 @@ const manrope = Manrope({ variable: "--font-display", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ELYON BARBER | Reservas",
-  description: "Maqueta frontend para reservas online de ELYON BARBER.",
+  description: "reservas online en ELYON BARBER.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
