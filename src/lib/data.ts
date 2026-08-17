@@ -1,23 +1,7 @@
 import { getSupabaseAdmin } from "./supabaseAdmin";
 
-export type PublicService = {
-  id: string;
-  name: string;
-  duration_minutes: number;
-  price: number;
-  description: string;
-  active: boolean;
-  sort_order: number;
-};
-
-export type PublicSettings = {
-  business_name: string;
-  barber_name: string;
-  location_city: string;
-  address: string;
-  google_maps_embed_url: string;
-  whatsapp_phone: string;
-};
+export type PublicService = { id: string; name: string; duration_minutes: number; price: number; description: string; active: boolean; sort_order: number };
+export type PublicSettings = { business_name: string; barber_name: string; location_city: string; address: string; google_maps_embed_url: string; whatsapp_phone: string };
 
 export async function getPublicConfig() {
   const supabase = getSupabaseAdmin();
@@ -25,20 +9,12 @@ export async function getPublicConfig() {
     supabase.from("business_settings").select("business_name,barber_name,location_city,address,google_maps_embed_url,whatsapp_phone").limit(1).single(),
     supabase.from("services").select("id,name,duration_minutes,price,description,active,sort_order").eq("active", true).order("sort_order"),
   ]);
-
   if (settingsError) throw settingsError;
   if (servicesError) throw servicesError;
   return { settings: settings as PublicSettings, services: services as PublicService[] };
 }
 
-function minutesFromTime(value: string) {
-  const [hours, minutes] = String(value).slice(0, 5).split(":").map(Number);
-  return hours * 60 + minutes;
-}
-
-function timeFromMinutes(value: number) {
-  return `${String(Math.floor(value / 60)).padStart(2, "0")}:${String(value % 60).padStart(2, "0")}`;
-}
+function minutesFromTime(value: string) { const [hours, minutes] = String(value).slice(0, 5).split(":").map(Number); return hours * 60 + minutes; }
 
 export async function getAvailabilityForDate(date: string, serviceDurationMinutes = 60) {
   const supabase = getSupabaseAdmin();
@@ -56,7 +32,7 @@ export async function getAvailabilityForDate(date: string, serviceDurationMinute
 
   const normalizedSlots = (slots ?? []).map((slot) => ({ ...slot, time_24: String(slot.time_24).slice(0, 5) }));
   const slotStarts = new Set(normalizedSlots.map((slot) => minutesFromTime(slot.time_24)));
-  const blocked = new Set((blockedSlots ?? []).map((slot) => minutesFromTime(String(slot.time_24))));
+  const blocked = (blockedSlots ?? []).map((slot) => minutesFromTime(String(slot.time_24)));
   const reservations = (reservations ?? []).map((reservation) => {
     const start = minutesFromTime(String(reservation.reservation_time));
     const reservationDuration = Math.max(1, Number(reservation.service_duration_minutes) || 60);
@@ -70,14 +46,11 @@ export async function getAvailabilityForDate(date: string, serviceDurationMinute
 
     for (let minute = start; minute < end; minute += 60) {
       if (!slotStarts.has(minute)) return false;
-      if (blocked.has(minute)) return false;
     }
-
-    return !reservations.some((reservation) => reservation.start < end && reservation.end > start);
+    if (blocked.some((blockedMinute) => blockedMinute >= start && blockedMinute < end)) return false;
+    if (reservations.some((reservation) => reservation.start < end && reservation.end > start)) return false;
+    return true;
   };
 
-  return {
-    available: true,
-    slots: normalizedSlots.filter((slot) => canFit(minutesFromTime(slot.time_24))),
-  };
+  return { available: true, slots: normalizedSlots.filter((slot) => canFit(minutesFromTime(slot.time_24))) };
 }
