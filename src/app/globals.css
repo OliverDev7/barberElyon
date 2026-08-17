@@ -59,101 +59,35 @@ input, select, textarea { min-width: 0; max-width: 100%; }
 }
 
 /* Compact service-confirmation sheet */
-.fixed.inset-0.z-50.grid.place-items-end:has(> section[class~="sm:rounded-b-none"]) {
-  padding: 0 16px 24px;
-}
-
-section[class~="sm:rounded-b-none"] {
-  position: relative;
-  width: min(100%, 600px) !important;
-  max-width: 600px !important;
-  max-height: none !important;
-  margin: 0 auto;
-  padding: 14px 24px 10px !important;
-  border-radius: 18px !important;
-  border: 1px solid #26343b;
-  box-shadow: 0 18px 42px -24px rgba(0, 0, 0, 0.45) !important;
-}
-
-section[class~="sm:rounded-b-none"] > div:first-child {
-  position: absolute; top: 8px; right: 8px; z-index: 2;
-}
+.fixed.inset-0.z-50.grid.place-items-end:has(> section[class~="sm:rounded-b-none"]) { padding: 0 16px 24px; }
+section[class~="sm:rounded-b-none"] { position: relative; width: min(100%, 600px) !important; max-width: 600px !important; max-height: none !important; margin: 0 auto; padding: 14px 24px 10px !important; border-radius: 18px !important; border: 1px solid #26343b; box-shadow: 0 18px 42px -24px rgba(0, 0, 0, 0.45) !important; }
+section[class~="sm:rounded-b-none"] > div:first-child { position: absolute; top: 8px; right: 8px; z-index: 2; }
 section[class~="sm:rounded-b-none"] > div:first-child button { width: 34px; height: 34px; background: #f5f6f6; font-size: 16px; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) { margin-top: 0 !important; }
-section[class~="sm:rounded-b-none"] > div:nth-child(2) > div {
-  width: 100% !important; max-width: none !important; padding: 4px 0 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
-  display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px;
-}
+section[class~="sm:rounded-b-none"] > div:nth-child(2) > div { width: 100% !important; max-width: none !important; padding: 4px 0 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) > div > div { min-width: 0; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) h3 { max-width: 100%; padding-right: 28px; font-size: 16px; line-height: 1.25; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) p { margin-top: 5px; font-size: 12px; line-height: 1.35; }
 section[class~="sm:rounded-b-none"] > div:nth-child(2) button { min-width: 126px; min-height: 38px; width: auto; white-space: nowrap; border-radius: 7px; font-size: 13px; padding: 9px 16px; }
-
 section[class~="sm:rounded-b-none"]::after { content: "Desarrollado por  ▪ BS"; display: block; margin-top: 7px; text-align: center; font-size: 9px; line-height: 1; color: #9aa3a1; }
-
 
 /* Mobile calendar: compact seven-day picker */
 @media (max-width: 767px) {
   article.group.flex.min-h-\[300px\] { min-height: 0; }
-
-  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] {
-    grid-template-columns: 24px minmax(0, 1fr) 24px !important;
-    gap: 2px !important;
-  }
-
-  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > button {
-    width: 24px !important;
-    height: 48px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    font-size: 27px !important;
-    line-height: 1 !important;
-    color: #26343b !important;
-  }
-
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] { grid-template-columns: 24px minmax(0, 1fr) 24px !important; gap: 2px !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > button { width: 24px !important; height: 48px !important; padding: 0 !important; background: transparent !important; border-radius: 0 !important; font-size: 27px !important; line-height: 1 !important; color: #26343b !important; }
   div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > button:disabled { opacity: .18 !important; }
-
   div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] { gap: 2px !important; }
-
-  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button {
-    width: 100% !important;
-    height: 70px !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    padding: 7px 1px 6px !important;
-    border-radius: 999px !important;
-    background: transparent !important;
-    transform: none !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-  }
-
-  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:first-child {
-    margin: 0 !important; padding: 0 !important; font-size: 11px !important; line-height: 14px !important; font-weight: 700 !important; color: #4b5559 !important;
-  }
-
-  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(2) {
-    margin-top: 4px !important; font-size: 22px !important; line-height: 22px !important; font-weight: 900 !important; color: #26343b !important;
-  }
-
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button { width: 100% !important; height: 70px !important; min-width: 0 !important; max-width: none !important; padding: 7px 1px 6px !important; border-radius: 999px !important; background: transparent !important; transform: none !important; box-shadow: none !important; overflow: visible !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:first-child { margin: 0 !important; padding: 0 !important; font-size: 11px !important; line-height: 14px !important; font-weight: 700 !important; color: #4b5559 !important; }
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(2) { margin-top: 4px !important; font-size: 22px !important; line-height: 22px !important; font-weight: 900 !important; color: #26343b !important; }
   div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(3) { display: none !important; }
-
-  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"] {
-    position: relative !important; background: #26343b !important; color: #fff !important; box-shadow: 0 7px 14px -10px rgba(38, 52, 59, .65) !important;
-  }
-
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"] { position: relative !important; background: #26343b !important; color: #fff !important; box-shadow: 0 7px 14px -10px rgba(38, 52, 59, .65) !important; }
   div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"] > span:first-child,
   div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"] > span:nth-child(2) { color: #fff !important; }
-
-  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"]::after {
-    content: ""; position: absolute; left: 50%; bottom: -5px; width: 7px; height: 7px; border-radius: 999px; background: #26343b; transform: translateX(-50%);
-  }
-
+  div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button[class*="scale-\[1.02\]"]::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 7px; height: 7px; border-radius: 999px; background: #26343b; transform: translateX(-50%); }
   div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] + p { display: none !important; }
-
   section[class*="animate-[step-in"] div[class*="grid-cols-\[44px_minmax\(0\,1fr\)_44px\]"] > div[class*="grid-cols-7"] > button > span:nth-child(2) { font-size: 21px !important; }
-
   .fixed.inset-0.z-50.grid.place-items-end:has(> section[class~="sm:rounded-b-none"]) { padding: 0 12px 14px; }
   section[class~="sm:rounded-b-none"] { width: min(100%, 520px) !important; padding: 14px 18px 10px !important; border-radius: 16px !important; }
   section[class~="sm:rounded-b-none"] > div:nth-child(2) > div { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
@@ -174,22 +108,142 @@ section[class~="sm:rounded-b-none"]::after { content: "Desarrollado por  ▪ BS"
 /* Booking hero refinement */
 main > section:first-of-type aside > p:first-child { display: none !important; }
 main > section:first-of-type aside > div > p { display: none !important; }
-main > section:first-of-type aside h1 {
-  max-width: 920px !important;
-  font-family: var(--font-display), Georgia, serif !important;
-  font-size: clamp(2.35rem, 5vw, 4.25rem) !important;
-  font-weight: 650 !important;
-  letter-spacing: -0.035em !important;
-  line-height: 1.03 !important;
-}
-main > section:first-of-type aside h1::before {
-  content: "Agenda tu próxima visita en Elyon Barber Studio.";
-}
+main > section:first-of-type aside h1 { max-width: 920px !important; font-family: var(--font-display), Georgia, serif !important; font-size: clamp(2.35rem, 5vw, 4.25rem) !important; font-weight: 650 !important; letter-spacing: -0.035em !important; line-height: 1.03 !important; }
+main > section:first-of-type aside h1::before { content: "Agenda tu próxima visita en Elyon Barber Studio."; }
 main > section:first-of-type aside h1 { font-size: 0 !important; }
 main > section:first-of-type aside h1::before { font-size: clamp(2.35rem, 5vw, 4.25rem); }
 
-@media (max-width: 640px) {
-  main > section:first-of-type aside h1::before { font-size: clamp(2rem, 9vw, 3rem); line-height: 1.08; }
+@media (max-width: 640px) { main > section:first-of-type aside h1::before { font-size: clamp(2rem, 9vw, 3rem); line-height: 1.08; } }
+
+/* ========================================================================
+   ADMIN RESPONSIVE SYSTEM
+   The admin has a fixed 280px sidebar on desktop and a drawer on mobile.
+   These rules intentionally adapt the existing markup instead of changing
+   admin business logic or duplicating components.
+   ======================================================================== */
+
+/* The admin content column must never become wider than the viewport. */
+body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] { min-width: 0; max-width: 100vw; }
+body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] > div { min-width: 0; width: 100%; }
+body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header > div { min-width: 0; max-width: 100%; }
+body:has(aside.w-\[280px\]) h1,
+body:has(aside.w-\[280px\]) h2,
+body:has(aside.w-\[280px\]) h3,
+body:has(aside.w-\[280px\]) p,
+body:has(aside.w-\[280px\]) span,
+body:has(aside.w-\[280px\]) label { overflow-wrap: anywhere; }
+
+/* Cards/grids: let CSS choose a sensible column count rather than squeezing. */
+body:has(aside.w-\[280px\]) [class*="grid-cols-"] { min-width: 0; }
+body:has(aside.w-\[280px\]) [class*="grid-cols-"] > * { min-width: 0; }
+
+/* Controls never force their parent wider than the viewport. */
+body:has(aside.w-\[280px\]) input,
+body:has(aside.w-\[280px\]) select,
+body:has(aside.w-\[280px\]) textarea { width: 100%; max-width: 100%; min-width: 0; }
+body:has(aside.w-\[280px\]) button { max-width: 100%; }
+
+/* Data tables stay readable without forcing the whole admin page sideways. */
+body:has(aside.w-\[280px\]) table { width: 100%; max-width: 100%; border-collapse: separate; border-spacing: 0; }
+body:has(aside.w-\[280px\]) th,
+body:has(aside.w-\[280px\]) td { max-width: 320px; overflow-wrap: anywhere; }
+body:has(aside.w-\[280px\]) table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+body:has(aside.w-\[280px\]) thead,
+body:has(aside.w-\[280px\]) tbody { min-width: 620px; }
+
+/* Large screens: use the available width without creating comically wide cards. */
+@media (min-width: 1280px) {
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] > div { padding-left: clamp(24px, 2.5vw, 40px); padding-right: clamp(24px, 2.5vw, 40px); }
+}
+
+@media (min-width: 1800px) {
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] > div { max-width: 1680px; margin-inline: auto; }
+}
+
+/* Tablet / mobile: sidebar becomes a comfortable drawer and content uses edge-safe padding. */
+@media (max-width: 1023px) {
+  body:has(aside.w-\[280px\]) { min-width: 320px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] { padding-left: 0 !important; width: 100%; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header { width: 100%; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header > div { gap: 10px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header h1 { min-width: 0; font-size: clamp(1.35rem, 4vw, 1.8rem); line-height: 1.15; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] > div { padding: 16px; }
+  body:has(aside.w-\[280px\]) aside.w-\[280px\] { width: min(86vw, 320px); max-width: calc(100vw - 24px); }
+}
+
+/* Phones: collapse common admin two-column layouts and make actions stack cleanly. */
+@media (max-width: 767px) {
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] > div { padding: 12px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header { padding: 10px 12px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header h1 { font-size: 1.35rem; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header button { min-height: 44px; min-width: 44px; }
+
+  /* Keep cards dense but breathable. */
+  body:has(aside.w-\[280px\]) section.rounded-2xl { border-radius: 16px; }
+  body:has(aside.w-\[280px\]) section.rounded-2xl.p-4 { padding: 14px; }
+
+  /* Most explicit desktop grids in the admin should become one readable column. */
+  body:has(aside.w-\[280px\]) [class*="grid-cols-2"]:not([class*="sm:"]):not([class*="md:"]):not([class*="lg:"]) { grid-template-columns: minmax(0, 1fr); }
+  body:has(aside.w-\[280px\]) [class*="md:grid-cols-2"] { grid-template-columns: minmax(0, 1fr) !important; }
+  body:has(aside.w-\[280px\]) [class*="lg:grid-cols-2"] { grid-template-columns: minmax(0, 1fr) !important; }
+  body:has(aside.w-\[280px\]) [class*="lg:grid-cols-3"] { grid-template-columns: minmax(0, 1fr) !important; }
+  body:has(aside.w-\[280px\]) [class*="xl:grid-cols-3"] { grid-template-columns: minmax(0, 1fr) !important; }
+  body:has(aside.w-\[280px\]) [class*="xl:grid-cols-4"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+
+  /* Toolbars and action groups wrap instead of producing clipped buttons. */
+  body:has(aside.w-\[280px\]) .flex.items-center.justify-between { flex-wrap: wrap; }
+  body:has(aside.w-\[280px\]) .flex.items-center.gap-2 { flex-wrap: wrap; }
+  body:has(aside.w-\[280px\]) .flex.items-center.gap-3 { flex-wrap: wrap; }
+  body:has(aside.w-\[280px\]) .flex.justify-end { flex-wrap: wrap; }
+  body:has(aside.w-\[280px\]) button { min-height: 44px; }
+  body:has(aside.w-\[280px\]) a.rounded-xl { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+  /* Search controls and pagination are touch-friendly. */
+  body:has(aside.w-\[280px\]) input,
+  body:has(aside.w-\[280px\]) select { min-height: 44px; }
+  body:has(aside.w-\[280px\]) textarea { min-height: 96px; }
+
+  /* Prevent long IDs, emails and reservation text from widening cards. */
+  body:has(aside.w-\[280px\]) [class*="truncate"] { min-width: 0; max-width: 100%; }
+  body:has(aside.w-\[280px\]) [class*="whitespace-nowrap"] { white-space: normal; }
+
+  /* Pagination buttons remain compact enough for 320px screens. */
+  body:has(aside.w-\[280px\]) button.min-w-9 { min-width: 36px; padding-inline: 9px; }
+}
+
+@media (max-width: 479px) {
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] > div { padding: 10px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header { padding: 8px 10px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header h1 { font-size: 1.2rem; }
+  body:has(aside.w-\[280px\]) section.rounded-2xl.p-4 { padding: 12px; }
+  body:has(aside.w-\[280px\]) .font-serif { letter-spacing: -0.02em; }
+  body:has(aside.w-\[280px\]) [class*="xl:grid-cols-4"] { grid-template-columns: minmax(0, 1fr) !important; }
+  body:has(aside.w-\[280px\]) .gap-10 { gap: 1.5rem; }
+  body:has(aside.w-\[280px\]) .gap-12 { gap: 1.5rem; }
+  body:has(aside.w-\[280px\]) table { font-size: 12px; }
+  body:has(aside.w-\[280px\]) thead,
+  body:has(aside.w-\[280px\]) tbody { min-width: 560px; }
+}
+
+@media (max-width: 359px) {
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] > div { padding: 8px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header { padding: 7px 8px; }
+  body:has(aside.w-\[280px\]) section.lg\:pl-\[280px\] header h1 { font-size: 1.08rem; }
+  body:has(aside.w-\[280px\]) section.rounded-2xl.p-4 { padding: 10px; border-radius: 14px; }
+  body:has(aside.w-\[280px\]) button { min-height: 42px; }
+  body:has(aside.w-\[280px\]) input,
+  body:has(aside.w-\[280px\]) select { min-height: 42px; }
+  body:has(aside.w-\[280px\]) table { font-size: 11px; }
+  body:has(aside.w-\[280px\]) thead,
+  body:has(aside.w-\[280px\]) tbody { min-width: 520px; }
+}
+
+/* Modals/drawers in admin: always fit inside the visual viewport. */
+@media (max-width: 767px) {
+  body:has(aside.w-\[280px\]) .fixed.inset-0 { padding: 12px; }
+  body:has(aside.w-\[280px\]) .fixed.inset-0 > section,
+  body:has(aside.w-\[280px\]) .fixed.inset-0 > div:not([class*="bg-neutral-950\/40"]) { max-width: 100%; }
+  body:has(aside.w-\[280px\]) .fixed.inset-0 [role="dialog"] { width: min(100%, 560px); max-height: calc(100dvh - 24px); overflow-y: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -200,4 +254,3 @@ main > section:first-of-type aside h1::before { font-size: clamp(2.35rem, 5vw, 4
     transition-duration: .01ms !important;
   }
 }
-
