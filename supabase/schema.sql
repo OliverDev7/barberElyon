@@ -71,8 +71,7 @@ create table if not exists reservations (
   phone text not null,
   observations text,
   status text not null default 'confirmed' check (status in ('confirmed', 'pending', 'cancelled')),
-  created_at timestamptz not null default now(),
-  unique(reservation_date, reservation_time)
+  created_at timestamptz not null default now()
 );
 
 insert into business_settings (business_name, barber_name, location_city, address, google_maps_embed_url, whatsapp_phone)
@@ -115,3 +114,6 @@ cross join (
 ) as s(time_24, period)
 where d.day_of_week between 1 and 6
 on conflict (day_of_week, time_24) do nothing;
+
+-- Para instalaciones existentes, ejecutar también la migración
+-- supabase/2026-08-17-reservation-duration.sql.
