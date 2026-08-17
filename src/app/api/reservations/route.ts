@@ -17,44 +17,44 @@ export async function POST(request: Request) {
     const time = String(body.time).trim();
     const firstName = String(body.firstName).trim();
     const lastName = String(body.lastName).trim();
+    const serviceId = String(body.serviceId).trim();
     const observations = typeof body.observations === "string" && body.observations.trim() ? body.observations.trim() : null;
 
-    if (!/^([^\s@]+)@([^\s@]+)\.[^\s@]+$/.test(email)) return Response.json({ error: "Correo inválido." }, { status: 400 });
+    if (!/^([^\s@]+)@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ error: "Correo inválido." }, { status: 400 });
     if (!/^\d{9}$/.test(phone)) return Response.json({ error: "Teléfono inválido. Debe contener 9 números." }, { status: 400 });
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return Response.json({ error: "Fecha u horario inválido." }, { status: 400 });
 
-    const availability = await getAvailabilityForDate(date);
-    if (!availability.available || !availability.slots.some((slot) => slot.time_24 === time)) return Response.json({ error: "Ese horario ya no está disponible." }, { status: 409 });
-
     const supabase = getSupabaseAdmin();
-    const { data: service, error: serviceError } = await supabase.from("services").select("id,name,price,duration_minutes").eq("id", body.serviceId).eq("active", true).single();
+    const { data: service, error: serviceError } = await supabase.from("services").select("id,name,price,duration_minutes").eq("id", serviceId).eq("active", true).single();
     if (serviceError || !service) return Response.json({ error: "Servicio no disponible." }, { status: 400 });
+
+    const availability = await getAvailabilityForDate(date, service.duration_minutes);
+    if (!availability.available || !availability.slots.some((slot) => slot.time_24 === time)) return Response.json({ error: "Ese horario ya no está disponible para la duración de este servicio." }, { status: 409 });
 
     let barberName: string | undefined;
     try {
       const configResult = await getPublicConfig();
-      barberName = configResult.data?.settings?.barber_name;
+      barberName = configResult.settings?.barber_name;
     } catch (configError) {
       console.error("Could not load barber configuration for reservation email:", configError);
     }
 
-    const { data: reservation, error } = await supabase.from("reservations").insert({
-      service_id: service.id,
-      service_name: service.name,
-      service_price: service.price,
-      service_duration_minutes: service.duration_minutes,
-      reservation_date: date,
-      reservation_time: time,
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      phone,
-      observations,
-      status: "confirmed",
-    }).select().single();
+    const { data: reservation, error } = await supabase.rpc("create_reservation", {
+      p_service_id: service.id,
+      p_service_name: service.name,
+      p_service_price: service.price,
+      p_service_duration_minutes: service.duration_minutes,
+      p_reservation_date: date,
+      p_reservation_time: time,
+      p_first_name: firstName,
+      p_last_name: lastName,
+      p_email: email,
+      p_phone: phone,
+      p_observations: observations,
+    });
 
     if (error) {
-      if (error.code === "23505") return Response.json({ error: "Ese horario acaba de ser reservado." }, { status: 409 });
+      if (error.code === "23P01" || error.message?.includes("RESERVATION_CONFLICT")) return Response.json({ error: "Ese horario ya no está disponible para la duración de este servicio." }, { status: 409 });
       throw error;
     }
 
@@ -73,16 +73,7 @@ export async function POST(request: Request) {
     const barberNotificationEmail = process.env.BARBER_NOTIFICATION_EMAIL?.trim() || process.env.ADMIN_EMAIL?.trim() || "";
     if (barberNotificationEmail) {
       try {
-        await sendBarberNotificationEmail(barberNotificationEmail, {
-          firstName,
-          lastName,
-          phone,
-          serviceName: service.name,
-          date,
-          time,
-          observations,
-          barberName,
-        });
+        await sendBarberNotificationEmail(barberNotificationEmail, { firstName, lastName, phone, serviceName: service.name, date, time, observations, barberName });
         barberEmailSent = true;
       } catch (barberEmailError) {
         console.error("Reservation created but barber notification email failed:", barberEmailError);
