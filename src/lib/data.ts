@@ -20,7 +20,7 @@ export async function getAvailabilityForDate(date: string, serviceDurationMinute
   const supabase = getSupabaseAdmin();
   const day = new Date(`${date}T12:00:00`).getDay();
   const duration = Math.max(1, Number(serviceDurationMinutes) || 60);
-  const [{ data: dayConfig }, { data: blockedDay }, { data: slots }, { data: blockedSlots }, { data: reservations }] = await Promise.all([
+  const [{ data: dayConfig }, { data: blockedDay }, { data: slots }, { data: blockedSlots }, { data: reservationRows }] = await Promise.all([
     supabase.from("availability_days").select("active,label").eq("day_of_week", day).single(),
     supabase.from("blocked_days").select("id").eq("date", date).maybeSingle(),
     supabase.from("availability_slots").select("id,time_24,period,active").eq("day_of_week", day).eq("active", true).order("time_24"),
@@ -32,7 +32,7 @@ export async function getAvailabilityForDate(date: string, serviceDurationMinute
   const normalizedSlots = (slots ?? []).map((slot) => ({ ...slot, time_24: String(slot.time_24).slice(0, 5) }));
   const slotStarts = new Set(normalizedSlots.map((slot) => minutesFromTime(slot.time_24)));
   const blocked = (blockedSlots ?? []).map((slot) => minutesFromTime(String(slot.time_24)));
-  const reservations = (reservations ?? []).map((reservation) => {
+ const reservations = (reservationRows ?? []).map((reservation) => {
     const start = minutesFromTime(String(reservation.reservation_time));
     const reservationDuration = Math.max(1, Number(reservation.service_duration_minutes) || 60);
     return { start, end: start + reservationDuration };
