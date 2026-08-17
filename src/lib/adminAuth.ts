@@ -2,8 +2,8 @@ import crypto from "crypto";
 import { cookies } from "next/headers";
 
 const cookieName = "elyon_admin_session";
-// Persistent admin session: the browser keeps the cookie for one year.
-// The session is still invalidated immediately when the administrator logs out.
+// Long-lived persistent session. The cookie survives browser restarts and the
+// signed value remains valid for one year unless the admin explicitly logs out.
 const sessionLifetimeSeconds = 60 * 60 * 24 * 365;
 
 export class AdminUnauthorizedError extends Error {
@@ -73,12 +73,20 @@ export async function setAdminCookie(value: string) {
     secure: process.env.NODE_ENV === "production",
     path: "/",
     maxAge: sessionLifetimeSeconds,
+    expires: new Date(Date.now() + sessionLifetimeSeconds * 1000),
   });
 }
 
 export async function clearAdminCookie() {
   const cookieStore = await cookies();
-  cookieStore.delete(cookieName);
+   cookieStore.set(cookieName, "", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 0,
+    expires: new Date(0),
+  });
 }
 
 export { cookieName };
