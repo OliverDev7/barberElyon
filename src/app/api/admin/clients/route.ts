@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const page = Math.max(1, Number(url.searchParams.get("page") ?? 1) || 1);
   const pageSize = Math.min(10, Math.max(1, Number(url.searchParams.get("pageSize") ?? 10) || 10));
   const { data, error } = await getSupabaseAdmin().rpc("admin_search_clients", { p_search: search, p_page: page, p_page_size: pageSize });
-  if (error) return Response.json({ error: "No se pudo consultar la lista de clientes. Ejecuta la migración supabase/admin_rework.sql en Supabase." }, { status: 500 });
+  if (error) return Response.json({ error: "No se pudo consultar la lista de clientes. Ejecuta la migración supabase/2026-08-17-admin-and-reservation-functions.sql en Supabase." }, { status: 500 });
   const total = Number(data?.[0]?.total_count ?? 0);
   return Response.json({ clients: data ?? [], page, pageSize, total, totalPages: Math.max(1, Math.ceil(total / pageSize)) });
 }

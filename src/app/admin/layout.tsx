@@ -4,7 +4,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <>
       <style>{`
-        /* Admin sidebar: every navigation item uses the exact same left edge. */
+        /* Keep every admin navigation item on the same left edge. */
         aside[class*="w-[280px]"] nav {
           display: flex !important;
           flex-direction: column !important;
@@ -37,8 +37,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
         @media (max-width: 1023px) {
           aside[class*="w-[280px]"] {
-            width: 100% !important;
-            max-width: 100% !important;
+            width: min(280px, 86vw) !important;
+            max-width: 86vw !important;
           }
         }
       `}</style>

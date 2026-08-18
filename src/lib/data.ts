@@ -14,25 +14,33 @@ export async function getPublicConfig() {
   return { settings: settings as PublicSettings, services: services as PublicService[] };
 }
 
-function minutesFromTime(value: string) { const [hours, minutes] = String(value).slice(0, 5).split(":").map(Number); return hours * 60 + minutes; }
+function minutesFromTime(value: string) {
+  const [hours, minutes] = String(value).slice(0, 5).split(":").map(Number);
+  return hours * 60 + minutes;
+}
 
 export async function getAvailabilityForDate(date: string, serviceDurationMinutes = 60) {
   const supabase = getSupabaseAdmin();
   const day = new Date(`${date}T12:00:00`).getDay();
   const duration = Math.max(1, Number(serviceDurationMinutes) || 60);
-  const [{ data: dayConfig }, { data: blockedDay }, { data: slots }, { data: blockedSlots }, { data: reservationRows }] = await Promise.all([
+  const [{ data: dayConfig, error: dayConfigError }, { data: blockedDay, error: blockedDayError }, { data: slots, error: slotsError }, { data: blockedSlots, error: blockedSlotsError }, { data: reservationRows, error: reservationsError }] = await Promise.all([
     supabase.from("availability_days").select("active,label").eq("day_of_week", day).single(),
     supabase.from("blocked_days").select("id").eq("date", date).maybeSingle(),
     supabase.from("availability_slots").select("id,time_24,period,active").eq("day_of_week", day).eq("active", true).order("time_24"),
     supabase.from("blocked_slots").select("time_24").eq("date", date),
     supabase.from("reservations").select("reservation_time,service_duration_minutes").eq("reservation_date", date).neq("status", "cancelled"),
   ]);
+  if (dayConfigError && dayConfigError.code !== "PGRST116") throw dayConfigError;
+  if (blockedDayError) throw blockedDayError;
+  if (slotsError) throw slotsError;
+  if (blockedSlotsError) throw blockedSlotsError;
+  if (reservationsError) throw reservationsError;
   if (!dayConfig?.active || blockedDay) return { available: false, slots: [] };
 
   const normalizedSlots = (slots ?? []).map((slot) => ({ ...slot, time_24: String(slot.time_24).slice(0, 5) }));
   const slotStarts = new Set(normalizedSlots.map((slot) => minutesFromTime(slot.time_24)));
   const blocked = (blockedSlots ?? []).map((slot) => minutesFromTime(String(slot.time_24)));
- const reservations = (reservationRows ?? []).map((reservation) => {
+  const reservationIntervals = (reservationRows ?? []).map((reservation) => {
     const start = minutesFromTime(String(reservation.reservation_time));
     const reservationDuration = Math.max(1, Number(reservation.service_duration_minutes) || 60);
     return { start, end: start + reservationDuration };
@@ -44,7 +52,7 @@ export async function getAvailabilityForDate(date: string, serviceDurationMinute
     if (end > closingMinutes) return false;
     for (let minute = start; minute < end; minute += 60) if (!slotStarts.has(minute)) return false;
     if (blocked.some((blockedMinute) => blockedMinute >= start && blockedMinute < end)) return false;
-    if (reservations.some((reservation) => reservation.start < end && reservation.end > start)) return false;
+    if (reservationIntervals.some((reservation) => reservation.start < end && reservation.end > start)) return false;
     return true;
   };
 
