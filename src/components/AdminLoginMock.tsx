@@ -40,22 +40,22 @@ export function AdminLoginMock() {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center bg-[#f7faf8] px-4 py-10 text-neutral-950">
+    <main className="app-shell grid min-h-screen place-items-center px-4 py-10">
       <section className="w-full max-w-md">
         <BrandMark />
         <Panel className="mt-8">
-          <p className="text-sm font-black uppercase tracking-[0.22em] text-teal-950">Panel Admin</p>
-          <h1 className="mt-3 font-serif text-4xl font-bold">Ingreso del barbero</h1>
-          <p className="mt-3 text-sm leading-6 text-neutral-500">Accede al centro de control de ELYON BARBER para gestionar reservas, servicios y disponibilidad.</p>
+          <p className="eyebrow">Panel Admin</p>
+          <h1 className="section-title mt-3">Ingreso del barbero</h1>
+          <p className="mt-3 text-sm leading-6 text-neutral-500">Accede al centro de control para gestionar reservas, servicios y disponibilidad.</p>
 
           <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
             <label className="grid gap-2 text-sm font-bold text-neutral-700">
               Correo
-              <input className="focus-ring min-h-12 rounded-lg border border-neutral-200 bg-white px-4" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" type="email" required />
+              <input className="focus-ring min-h-11 rounded-lg border border-[#dce9e5] bg-white px-4 transition focus:border-teal-950" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" type="email" required />
             </label>
             <label className="grid gap-2 text-sm font-bold text-neutral-700">
               Contraseña
-              <input className="focus-ring min-h-12 rounded-lg border border-neutral-200 bg-white px-4" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" type="password" required />
+              <input className="focus-ring min-h-11 rounded-lg border border-[#dce9e5] bg-white px-4 transition focus:border-teal-950" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" type="password" required />
             </label>
             {error && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{error}</p>}
             <Button type="submit" disabled={loading}>{loading ? "Ingresando..." : "Ingresar al panel"}</Button>
