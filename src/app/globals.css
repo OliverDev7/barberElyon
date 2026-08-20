@@ -371,6 +371,71 @@ body:has(aside.w-\[280px\]) label {
   }
 }
 
+@media (min-width: 768px) {
+  /* Desktop/tablet: the booking section becomes full-bleed so the Hero can span the viewport. */
+  .app-shell > section.page-container {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .app-shell > section.page-container > div {
+    width: 100%;
+    gap: 0;
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky {
+    width: 100%;
+    min-height: clamp(560px, 68vh, 720px);
+    border-radius: 0;
+    padding: clamp(3rem, 7vw, 6rem) clamp(2rem, 8vw, 8rem);
+    align-items: center;
+    text-align: center;
+    background-position: center;
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky > p.eyebrow,
+  .app-shell > section.page-container > div > aside.lg\:sticky > h1.display-title,
+  .app-shell > section.page-container > div > aside.lg\:sticky > p.body-copy {
+    width: min(100%, 900px);
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky > p.eyebrow {
+    text-align: center;
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky > h1.display-title::before {
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky > p.body-copy {
+    max-width: 700px;
+    margin-top: 2rem;
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky > p.body-copy::before {
+    margin-inline: auto;
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky > p.body-copy::after {
+    max-width: 680px;
+    margin-inline: auto;
+  }
+
+  .app-shell > section.page-container > div > aside.lg\:sticky + section {
+    width: min(100% - clamp(2rem, 5vw, 5rem), 1180px);
+    margin: clamp(3.5rem, 6vw, 5.5rem) auto 0;
+  }
+
+  .app-shell > section.page-container {
+    padding-bottom: clamp(4rem, 7vw, 6rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
