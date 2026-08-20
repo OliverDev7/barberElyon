@@ -164,6 +164,13 @@ textarea {
   box-shadow: var(--shadow-lift);
 }
 
+/* Home / booking: keep the Hero and the booking/services panel stacked vertically at every breakpoint. */
+.app-shell > section.page-container > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 /* Home / booking hero: replaces the old booking-introduction copy without touching the booking flow. */
 .app-shell > section.page-container > div > aside.lg\:sticky {
   position: relative;
