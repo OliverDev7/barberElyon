@@ -71,10 +71,48 @@ export function ReviewsModal({ open, onClose }: { open: boolean; onClose: () => 
     }
   }
 
-  useEffect(() => {
-    if (!open) return;
-    void loadReviews();
-  }, [open]);
+ useEffect(() => {
+  if (!open) return;
+
+  let cancelled = false;
+
+  const fetchReviews = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/reviews");
+
+      if (!response.ok) {
+        throw new Error("No se pudieron cargar las reseñas");
+      }
+
+      const data = await response.json();
+
+      if (cancelled) return;
+
+      setReviews(data);
+      setError(null);
+    } catch (error) {
+      if (cancelled) return;
+
+      setError(
+        error instanceof Error
+          ? error.message
+          : "No se pudieron cargar las reseñas"
+      );
+    } finally {
+      if (!cancelled) {
+        setLoading(false);
+      }
+    }
+  };
+
+  void fetchReviews();
+
+  return () => {
+    cancelled = true;
+  };
+}, [open]);
 
   async function submitReview(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

@@ -13,7 +13,7 @@ type Day = { id?: string; day_of_week: number; label: string; active: boolean };
 type Slot = { id: string; day_of_week: number; time_24: string; period: string; active: boolean };
 type Block = { id: string; date: string; time_24?: string; reason?: string };
 type Client = { email: string; first_name: string; last_name: string; phone: string; last_service: string; last_reservation_date: string; reservations_count: number };
-type AdminReview = { id: string; full_name: string; email: string; rating: number; review_text: string; approved: boolean; created_at: string };
+//type AdminReview = { id: string; full_name: string; email: string; rating: number; review_text: string; approved: boolean; created_at: string };
 type ServiceForm = Omit<Service, "id"> & { id: string };
 type Section = "dashboard" | "reservas" | "clientes" | "servicios" | "agenda" | "configuracion";
 
