@@ -13,7 +13,7 @@ export function BrandMark({ dark = false }: { dark?: boolean }) {
       </div>
       <div className="min-w-0">
         <p className="truncate text-sm font-black uppercase tracking-[0.12em] text-current">Elyon Barber</p>
-        <p className={`mt-0.5 text-[11px] font-semibold ${dark ? "text-white/58" : "text-neutral-500"}`}>Studio de reservas</p>
+        <p className={`mt-0.5 text-[11px] font-semibold ${dark ? "text-white/58" : "text-neutral-500"}`}></p>
       </div>
     </div>
   );
@@ -106,7 +106,7 @@ export function PublicFooter() {
         </div>
         {verse && (
           <div className="border-t border-[#edf3f1] pt-7 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-            <p className="eyebrow text-neutral-400">Una palabra de esperanza</p>
+            <p className="eyebrow text-neutral-400">Para ti</p>
             <blockquote className="mt-3 max-w-sm font-display text-base font-semibold leading-7 text-neutral-700">
               “{verse.text}”
             </blockquote>

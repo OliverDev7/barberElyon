@@ -1,7 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { BrandMark, Button, DarkPanel, PublicFooter, StatusPill } from "./ui";
+import { HeroSection } from "./HeroSection";
+import logoImage from "@/images/logotipoo.jpg";
+import { ReviewsModal } from "./ReviewsModal";
+import { Button, DarkPanel, PublicFooter, StatusPill } from "./ui";
 import { durationLabel, formatPrice, formatTime } from "@/lib/format";
 
 type Service = { id: string; name: string; duration_minutes: number; price: number; description: string };
@@ -55,7 +59,7 @@ export function BookingFlow() {
   const [viewStart, setViewStart] = useState<Date>(today);
   const [slots, setSlots] = useState<Slot[]>([]);
   const [time, setTime] = useState("");
-  const [modal, setModal] = useState<"location" | "hours" | "success" | null>(null);
+  const [modal, setModal] = useState<"reviews" | "location" | "hours" | "success" | null>(null);
   const [form, setForm] = useState({ name: "", lastName: "", email: "", phone: "", comment: "" });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -169,27 +173,19 @@ export function BookingFlow() {
     <main className="app-shell">
       <header className="sticky top-0 z-30 border-b border-[#dce9e5] bg-white/88 px-4 py-3 backdrop-blur-xl sm:px-6">
         <div className="page-container flex items-center justify-between gap-4">
-          <BrandMark />
-          <nav className="flex items-center gap-1 text-sm font-bold text-neutral-700 sm:gap-2">
+          <Image src={logoImage} alt="Elyon Barber Studio" className="h-10 w-auto rounded-sm object-contain sm:h-11" priority />
+          <nav className="flex min-w-0 items-center gap-0.5 text-sm font-bold text-neutral-700 sm:gap-2">
+            <button className="focus-ring rounded-lg px-2.5 py-2 transition hover:bg-[#eef5f3] hover:text-teal-950 sm:px-3" onClick={() => setModal("reviews")}>Reseñas</button>
             <button className="focus-ring rounded-lg px-3 py-2 transition hover:bg-[#eef5f3] hover:text-teal-950" onClick={() => setModal("location")}>Ubicación</button>
             <button className="focus-ring rounded-lg px-3 py-2 transition hover:bg-[#eef5f3] hover:text-teal-950" onClick={() => setModal("hours")}>Horario</button>
           </nav>
         </div>
       </header>
 
-      <section className="page-container py-8 sm:py-12 lg:py-16">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(560px,1.18fr)] lg:items-start xl:gap-12">
-          <aside className="lg:sticky lg:top-28">
-            <p className="eyebrow">Reserva online</p>
-            <h1 className="display-title mt-4 max-w-2xl">Agenda tu próxima visita en Elyon Barber Studio.</h1>
-            <p className="body-copy mt-5 max-w-xl">Elige servicio, fecha y horario en un flujo claro. Confirmamos tu reserva con los datos esenciales y sin pasos innecesarios.</p>
-            <div className="mt-7 grid gap-3 text-sm text-neutral-600 sm:grid-cols-3 lg:grid-cols-1">
-              <div className="rounded-lg border border-[#dce9e5] bg-white/70 p-4"><b className="block text-teal-950">01</b><span>Servicio</span></div>
-              <div className="rounded-lg border border-[#dce9e5] bg-white/70 p-4"><b className="block text-teal-950">02</b><span>Fecha y hora</span></div>
-              <div className="rounded-lg border border-[#dce9e5] bg-white/70 p-4"><b className="block text-teal-950">03</b><span>Confirmación</span></div>
-            </div>
-          </aside>
+      <section className="pb-10 sm:pb-12 lg:pb-24">
+        <HeroSection />
 
+        <div className="page-container mt-8 md:mt-[clamp(5rem,8vw,8rem)] lg:mt-20">
           <DarkPanel className="overflow-hidden">
             <div className="mb-7 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
               <StepPill index={1} label="Servicios" active={step === "services"} done={step !== "services"} />
@@ -317,6 +313,7 @@ export function BookingFlow() {
       </section>
 
       <PublicFooter />
+      <ReviewsModal open={modal === "reviews"} onClose={() => setModal(null)} />
 
       {pendingService && (
         <Modal title="" compact onClose={() => setPendingService(null)}>
