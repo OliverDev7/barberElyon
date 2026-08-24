@@ -11,8 +11,8 @@ export async function GET(request: Request) {
   const search = url.searchParams.get("search") ?? "";
   const page = Math.max(1, Number(url.searchParams.get("page") ?? 1) || 1);
   const pageSize = Math.min(5, Math.max(1, Number(url.searchParams.get("pageSize") ?? 5) || 5));
-  const { data, error } = await getSupabaseAdmin().rpc("admin_search_reservations", { p_search: search, p_page: page, p_page_size: pageSize });
-  if (error) return Response.json({ error: "No se pudo consultar las reservas. Ejecuta la migración supabase/2026-08-17-admin-and-reservation-functions.sql en Supabase." }, { status: 500 });
+  const { data, error } = await getSupabaseAdmin().rpc("admin_search_reservations_v2", { p_search: search, p_page: page, p_page_size: pageSize });
+  if (error) return Response.json({ error: "No se pudo consultar las reservas. Ejecuta la migración supabase/2026-08-24-customers-discounts-and-retention.sql en Supabase." }, { status: 500 });
   const total = Number(data?.[0]?.total_count ?? 0);
   return Response.json({ reservations: data ?? [], page, pageSize, total, totalPages: Math.max(1, Math.ceil(total / pageSize)) });
 }

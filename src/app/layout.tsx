@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import { DiscountPriceEnhancer } from "@/components/DiscountPriceEnhancer";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${inter.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>{children}<DiscountPriceEnhancer /></body>
     </html>
   );
 }

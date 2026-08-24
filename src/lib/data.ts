@@ -1,17 +1,37 @@
 import { getSupabaseAdmin } from "./supabaseAdmin";
 
-export type PublicService = { id: string; name: string; duration_minutes: number; price: number; description: string; active: boolean; sort_order: number };
+export type PublicService = {
+  id: string;
+  name: string;
+  duration_minutes: number;
+  price: number;
+  original_price: number;
+  discount_active: boolean;
+  discount_price: number | null;
+  description: string;
+  active: boolean;
+  sort_order: number;
+};
 export type PublicSettings = { business_name: string; barber_name: string; location_city: string; address: string; google_maps_embed_url: string; whatsapp_phone: string };
 
 export async function getPublicConfig() {
   const supabase = getSupabaseAdmin();
   const [{ data: settings, error: settingsError }, { data: services, error: servicesError }] = await Promise.all([
     supabase.from("business_settings").select("business_name,barber_name,location_city,address,google_maps_embed_url,whatsapp_phone").limit(1).single(),
-    supabase.from("services").select("id,name,duration_minutes,price,description,active,sort_order").eq("active", true).order("sort_order"),
+    supabase.from("services").select("id,name,duration_minutes,price,discount_price,discount_active,description,active,sort_order").eq("active", true).order("sort_order"),
   ]);
   if (settingsError) throw settingsError;
   if (servicesError) throw servicesError;
-  return { settings: settings as PublicSettings, services: services as PublicService[] };
+  const publicServices = (services ?? []).map((service) => {
+    const hasDiscount = Boolean(service.discount_active && service.discount_price !== null && Number(service.discount_price) < Number(service.price));
+    return {
+      ...service,
+      original_price: Number(service.price),
+      price: hasDiscount ? Number(service.discount_price) : Number(service.price),
+      discount_active: hasDiscount,
+    };
+  });
+  return { settings: settings as PublicSettings, services: publicServices as PublicService[] };
 }
 
 function minutesFromTime(value: string) {

@@ -1,4 +1,4 @@
-import { AdminShell } from "@/components/AdminShell";
+import { AdminServicesPage } from "@/components/AdminServicesPage";
 import { requireAdmin } from "@/lib/adminAuth";
 import { redirect } from "next/navigation";
 
@@ -10,5 +10,5 @@ export default async function ServicesPage() {
   } catch {
     redirect("/admin/login");
   }
-  return <AdminShell section="servicios" />;
+  return <AdminServicesPage />;
 }

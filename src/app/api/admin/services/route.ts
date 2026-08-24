@@ -7,14 +7,18 @@ function servicePayload(body: Record<string, unknown>) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const duration_minutes = Number(body.duration_minutes);
   const price = Number(body.price);
+  const discount_price = body.discount_price === null || body.discount_price === "" || body.discount_price === undefined ? null : Number(body.discount_price);
+  const discount_active = body.discount_active === undefined ? false : Boolean(body.discount_active);
   const description = typeof body.description === "string" ? body.description.trim() : "";
   const active = body.active === undefined ? true : Boolean(body.active);
   const sort_order = Number(body.sort_order ?? 99);
   if (!name) throw new Error("El nombre del servicio es obligatorio.");
   if (!Number.isInteger(duration_minutes) || duration_minutes <= 0) throw new Error("La duración debe ser un número entero mayor que 0.");
-  if (!Number.isInteger(price) || price < 0) throw new Error("El precio debe ser un número entero mayor o igual a 0.");
+  if (!Number.isInteger(price) || price < 0) throw new Error("El precio debe ser un número entero mayor o igual que 0.");
+  if (discount_price !== null && (!Number.isInteger(discount_price) || discount_price < 0)) throw new Error("El precio de oferta no es válido.");
+  if (discount_active && discount_price !== null && discount_price >= price) throw new Error("El precio de oferta debe ser menor que el precio normal.");
   if (!Number.isInteger(sort_order)) throw new Error("El orden no es válido.");
-  return { name, duration_minutes, price, description, active, sort_order };
+  return { name, duration_minutes, price, discount_price, discount_active, description, active, sort_order };
 }
 
 export async function GET() {
