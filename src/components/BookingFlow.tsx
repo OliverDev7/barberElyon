@@ -60,6 +60,7 @@ export function BookingFlow() {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [time, setTime] = useState("");
   const [modal, setModal] = useState<"reviews" | "location" | "hours" | "success" | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [form, setForm] = useState({ name: "", lastName: "", email: "", phone: "", comment: "" });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -169,18 +170,58 @@ export function BookingFlow() {
     setEmailWarning(""); setError(""); goToToday();
   }
 
+  function openMobileModal(nextModal: "reviews" | "location" | "hours") {
+    setMenuOpen(false);
+    setModal(nextModal);
+  }
+
   return (
     <main className="app-shell">
-      <header className="sticky top-0 z-30 border-b border-[#dce9e5] bg-white/88 px-4 py-3 backdrop-blur-xl sm:px-6">
+      <header className="sticky top-0 z-50 border-b border-[#dce9e5] bg-white/88 px-4 py-3 backdrop-blur-xl sm:px-6">
         <div className="page-container flex items-center justify-between gap-4">
           <Image src={logoImage} alt="Elyon Barber Studio" className="h-10 w-auto rounded-sm object-contain sm:h-11" priority />
-          <nav className="flex min-w-0 items-center gap-0.5 text-sm font-bold text-neutral-700 sm:gap-2">
+          <nav className="hidden min-w-0 items-center gap-0.5 text-sm font-bold text-neutral-700 sm:gap-2 lg:flex">
             <button className="focus-ring rounded-lg px-2.5 py-2 transition hover:bg-[#eef5f3] hover:text-teal-950 sm:px-3" onClick={() => setModal("reviews")}>Reseñas</button>
             <button className="focus-ring rounded-lg px-3 py-2 transition hover:bg-[#eef5f3] hover:text-teal-950" onClick={() => setModal("location")}>Ubicación</button>
             <button className="focus-ring rounded-lg px-3 py-2 transition hover:bg-[#eef5f3] hover:text-teal-950" onClick={() => setModal("hours")}>Horario</button>
           </nav>
+          <button
+            type="button"
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((current) => !current)}
+            className="focus-ring relative z-[60] grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-[#dce9e5] bg-white text-teal-950 transition hover:bg-[#eef5f3] lg:hidden"
+          >
+            <span className="sr-only">{menuOpen ? "Cerrar menú" : "Abrir menú"}</span>
+            <span className={`absolute h-0.5 w-5 rounded-full bg-current transition-transform duration-200 ${menuOpen ? "rotate-45" : "-translate-y-1.5"}`} />
+            <span className={`absolute h-0.5 w-5 rounded-full bg-current transition-opacity duration-150 ${menuOpen ? "opacity-0" : "opacity-100"}`} />
+            <span className={`absolute h-0.5 w-5 rounded-full bg-current transition-transform duration-200 ${menuOpen ? "-rotate-45" : "translate-y-1.5"}`} />
+          </button>
         </div>
       </header>
+
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden" role="presentation" onClick={() => setMenuOpen(false)}>
+          <div className="absolute inset-0 bg-neutral-950/35 backdrop-blur-[2px]" />
+          <aside
+            className="absolute right-0 top-0 flex h-full w-[min(88vw,340px)] flex-col border-l border-[#dce9e5] bg-white px-5 pb-6 pt-20 shadow-2xl animate-[sheet-in_220ms_ease-out] sm:w-[min(76vw,360px)]"
+            aria-label="Menú de navegación"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <nav className="grid gap-2" aria-label="Navegación móvil">
+              <button type="button" onClick={() => openMobileModal("reviews")} className="focus-ring flex min-h-12 w-full items-center justify-between rounded-xl border border-[#dce9e5] bg-white px-4 text-left text-sm font-bold text-neutral-700 transition hover:bg-[#eef5f3] hover:text-teal-950">
+                <span>Reseñas</span><span aria-hidden="true">→</span>
+              </button>
+              <button type="button" onClick={() => openMobileModal("location")} className="focus-ring flex min-h-12 w-full items-center justify-between rounded-xl border border-[#dce9e5] bg-white px-4 text-left text-sm font-bold text-neutral-700 transition hover:bg-[#eef5f3] hover:text-teal-950">
+                <span>Ubicación</span><span aria-hidden="true">→</span>
+              </button>
+              <button type="button" onClick={() => openMobileModal("hours")} className="focus-ring flex min-h-12 w-full items-center justify-between rounded-xl border border-[#dce9e5] bg-white px-4 text-left text-sm font-bold text-neutral-700 transition hover:bg-[#eef5f3] hover:text-teal-950">
+                <span>Horario</span><span aria-hidden="true">→</span>
+              </button>
+            </nav>
+          </aside>
+        </div>
+      )}
 
       <section className="pb-10 sm:pb-12 lg:pb-24">
         <HeroSection />

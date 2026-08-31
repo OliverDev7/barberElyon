@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 
-const SOCIAL_LINKS = { instagram: "#", whatsapp: "#" };
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/alonsoo.lkoo/",
+  whatsapp: "https://wa.me/56975305607",
+};
 
 export function BrandMark({ dark = false }: { dark?: boolean }) {
   return (
