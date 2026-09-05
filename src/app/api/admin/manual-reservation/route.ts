@@ -8,6 +8,35 @@ function clean(value: unknown, max = 120) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
+export async function GET(request: Request) {
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
+
+  const search = clean(new URL(request.url).searchParams.get("search"), 120);
+  if (search.length < 2) return Response.json({ customers: [] });
+
+  const supabase = getSupabaseAdmin();
+  const term = `%${search.replace(/[%_]/g, "\\$&")}%`;
+  const { data, error } = await supabase
+    .from("customers")
+    .select("id,first_name,last_name,email,phone,last_reservation:reservations(service_name,reservation_date,reservation_time)")
+    .or(`first_name.ilike.${term},last_name.ilike.${term},email.ilike.${term},phone.ilike.${term}`)
+    .order("first_name")
+    .limit(10);
+
+  if (error) return Response.json({ error: "No se pudo buscar clientes." }, { status: 500 });
+
+  return Response.json({
+    customers: (data ?? []).map((customer) => ({
+      id: customer.id,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      email: customer.email,
+      phone: customer.phone,
+    })),
+  });
+}
+
 export async function POST(request: Request) {
   const unauthorized = await requireAdminApi();
   if (unauthorized) return unauthorized;
