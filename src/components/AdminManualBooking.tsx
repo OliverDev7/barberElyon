@@ -173,7 +173,7 @@ export function AdminManualBooking() {
           <p className="text-xs font-black uppercase tracking-[0.16em] text-neutral-400">2 · Servicio</p>
           <h3 className="mt-1 text-xl font-black">Qué servicio realizará</h3>
           <div className="mt-5 grid gap-4">
-            <label className="grid gap-2 text-sm font-bold text-neutral-700">Servicio<select className={inputClass} value={serviceId} onChange={(event) => setServiceId(event.target.value)}>{services.map((service) => { const discounted = service.discount_active && service.discount_price !== null && service.discount_price < service.price; return <option key={service.id} value={service.id}>{service.name} · {formatPrice(discounted ? service.discount_price : service.price)}</option>; })}</select></label>
+            <label className="grid gap-2 text-sm font-bold text-neutral-700">Servicio<select className={inputClass} value={serviceId} onChange={(event) => setServiceId(event.target.value)}>{services.map((service) => { const discounted = service.discount_active && service.discount_price !== null && service.discount_price < service.price; const displayPrice = discounted ? Number(service.discount_price) : service.price; return <option key={service.id} value={service.id}>{service.name} · {formatPrice(displayPrice)}</option>; })}</select></label>
             {selectedService && <div className="flex flex-wrap items-center gap-2"><StatusPill tone="gray">{selectedService.duration_minutes} min</StatusPill>{selectedService.discount_active && <StatusPill tone="red">Oferta · {formatPrice(effectivePrice)}</StatusPill>}</div>}
           </div>
         </Panel>
