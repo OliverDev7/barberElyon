@@ -12,7 +12,7 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: "1"
       SUPABASE_URL: "https://example.supabase.co"
-      SUPABASE_SERVICE_ROLE_KEY: "ci-placeholder-service-role-key"
+      SUPABASE_SECRET_KEY: "sb_secret_ci_placeholder"
       ADMIN_EMAIL: "ci@example.com"
       ADMIN_PASSWORD: "ci-placeholder-password"
       ADMIN_SESSION_SECRET: "ci-placeholder-session-secret-01234567890123456789"
