@@ -73,8 +73,10 @@ export function ReviewsModal({ open, onClose }: { open: boolean; onClose: () => 
 
   useEffect(() => {
     if (!open) return;
-
-    void Promise.resolve().then(() => loadReviews());
+    void Promise.resolve().then(() => {
+      void fetch("/api/public/review-click", { method: "POST", keepalive: true }).catch(() => undefined);
+      void loadReviews();
+    });
   }, [open]);
 
   async function submitReview(event: React.FormEvent<HTMLFormElement>) {
@@ -110,7 +112,7 @@ export function ReviewsModal({ open, onClose }: { open: boolean; onClose: () => 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-neutral-950/50 p-3 backdrop-blur-sm sm:p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-neutral-950/50 p-3 backdrop-blur-sm" onClick={onClose}>
       <section
         role="dialog"
         aria-modal="true"
@@ -163,7 +165,7 @@ export function ReviewsModal({ open, onClose }: { open: boolean; onClose: () => 
             </div>
           )}
 
-          {!showForm && <Button className="w-full sm:w-fit" onClick={() => setShowForm(true)}>Dejar mi reseña</Button>}
+          {!showForm && <Button className="w-full sm:w-fit" onClick={() => { window.location.href = "/resena"; }}>Dejar mi reseña</Button>}
 
           {showForm && (
             <form className="grid gap-4 rounded-lg border border-[#dce9e5] bg-white p-4 sm:p-5" onSubmit={submitReview}>
