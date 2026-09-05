@@ -6,8 +6,7 @@ import { Button, Panel, StatusPill } from "./ui";
 import { formatPrice, formatTime } from "@/lib/format";
 
 type Service = { id: string; name: string; duration_minutes: number; price: number; discount_price: number | null; discount_active: boolean };
-type Client = { email: string | null; first_name: string; last_name: string; phone: string | null; last_service: string | null; last_reservation_date: string | null; reservations_count: number };
-
+type Client = { id: string; email: string | null; first_name: string; last_name: string; phone: string | null };
 type Availability = { available: boolean; slots: Array<{ time_24: string }> };
 
 const inputClass = "focus-ring min-h-11 w-full rounded-xl border border-[#dce9e5] bg-white px-4 text-sm font-semibold text-neutral-900 outline-none transition focus:border-teal-950";
@@ -54,11 +53,11 @@ export function AdminManualBooking() {
         setClients([]);
         return;
       }
-      fetch(`/api/admin/clients?search=${encodeURIComponent(search.trim())}&page=1&pageSize=10`, { cache: "no-store" })
+      fetch(`/api/admin/manual-reservation?search=${encodeURIComponent(search.trim())}`, { cache: "no-store" })
         .then(async (response) => {
           const data = await response.json();
           if (!response.ok) throw new Error(data.error ?? "No se pudo buscar el cliente.");
-          setClients(data.clients ?? []);
+          setClients(data.customers ?? []);
         })
         .catch(() => setClients([]));
     }, 220);
@@ -114,7 +113,7 @@ export function AdminManualBooking() {
       const response = await fetch("/api/admin/manual-reservation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customerId: selectedClient ? undefined : undefined, firstName, lastName, serviceId, date, time }),
+        body: JSON.stringify({ customerId: selectedClient?.id, firstName, lastName, serviceId, date, time }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error ?? "No se pudo crear la reserva.");
@@ -157,7 +156,7 @@ export function AdminManualBooking() {
             {!newClient && !selectedClient ? (
               <>
                 <label className="grid gap-2 text-sm font-bold text-neutral-700">Buscar cliente<input className={inputClass} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Nombre, teléfono o correo" autoComplete="off" /></label>
-                {clients.length > 0 && <div className="grid gap-2 rounded-2xl border border-[#dce9e5] bg-neutral-50 p-2">{clients.map((client) => <button key={`${client.email ?? "no-email"}-${client.first_name}-${client.last_name}`} type="button" onClick={() => chooseClient(client)} className="rounded-xl p-3 text-left transition hover:bg-white"><p className="font-black text-neutral-950">{client.first_name} {client.last_name}</p><p className="mt-1 text-xs text-neutral-500">{client.phone || client.email || "Sin datos de contacto"}</p></button>)}</div>}
+                {clients.length > 0 && <div className="grid gap-2 rounded-2xl border border-[#dce9e5] bg-neutral-50 p-2">{clients.map((client) => <button key={client.id} type="button" onClick={() => chooseClient(client)} className="rounded-xl p-3 text-left transition hover:bg-white"><p className="font-black text-neutral-950">{client.first_name} {client.last_name}</p><p className="mt-1 text-xs text-neutral-500">{client.phone || client.email || "Sin datos de contacto"}</p></button>)}</div>}
                 <div className="flex items-center gap-3"><span className="h-px flex-1 bg-neutral-100" /><span className="text-xs font-bold uppercase tracking-wide text-neutral-400">o</span><span className="h-px flex-1 bg-neutral-100" /></div>
                 <Button type="button" variant="ghost" onClick={chooseNewClient}>＋ Cliente nuevo</Button>
               </>
