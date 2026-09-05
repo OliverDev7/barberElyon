@@ -11,10 +11,7 @@ export function AdminDashboardQuickAction() {
   const [reviewClicks, setReviewClicks] = useState(0);
 
   useEffect(() => {
-    if (pathname !== "/admin") {
-      setTarget(null);
-      return;
-    }
+    if (pathname !== "/admin") return;
 
     let cancelled = false;
     const findTarget = () => {
@@ -22,11 +19,13 @@ export function AdminDashboardQuickAction() {
         .find((node) => node.textContent?.trim() === "Resumen del negocio")?.parentElement;
       if (!cancelled && element) {
         element.querySelector("p")?.classList.add("hidden");
-        setTarget(element);
+        queueMicrotask(() => {
+          if (!cancelled) setTarget(element);
+        });
       }
     };
 
-    void Promise.resolve().then(findTarget);
+    queueMicrotask(findTarget);
     const observer = new MutationObserver(findTarget);
     observer.observe(document.body, { childList: true, subtree: true });
 
