@@ -65,18 +65,18 @@ export function AdminManualBooking() {
   }, [search]);
 
   useEffect(() => {
-    if (!date || !serviceId) {
-      setAvailability({ available: false, slots: [] });
-      return;
-    }
-    setTime("");
+    if (!date || !serviceId) return;
     fetch(`/api/public/availability?date=${encodeURIComponent(date)}&serviceId=${encodeURIComponent(serviceId)}`, { cache: "no-store" })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error ?? "No se pudo cargar la disponibilidad.");
         setAvailability(data);
+        setTime("");
       })
-      .catch(() => setAvailability({ available: false, slots: [] }));
+      .catch(() => {
+        setAvailability({ available: false, slots: [] });
+        setTime("");
+      });
   }, [date, serviceId]);
 
   const selectedService = useMemo(() => services.find((service) => service.id === serviceId) ?? null, [services, serviceId]);
