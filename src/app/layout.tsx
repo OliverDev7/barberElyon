@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import { AdminDashboardQuickAction } from "@/components/AdminDashboardQuickAction";
 import { DiscountPriceEnhancer } from "@/components/DiscountPriceEnhancer";
 import "./globals.css";
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${inter.variable} ${manrope.variable}`}>
-      <body>{children}<DiscountPriceEnhancer /></body>
+      <body>{children}<DiscountPriceEnhancer /><AdminDashboardQuickAction /></body>
     </html>
   );
 }
