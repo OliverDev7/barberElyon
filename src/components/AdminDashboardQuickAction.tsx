@@ -60,7 +60,6 @@ export function AdminDashboardQuickAction() {
         <p className="mt-1 text-xs font-semibold text-white/65">Crea una reserva manual sin enviar correos.</p>
       </div>
       <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-center sm:justify-center">
-        <span className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-xs font-black text-white ring-1 ring-white/15" aria-label={`${reviewClicks} aperturas de reseñas`}>{reviewClicks}</span>
         <button
           type="button"
           onClick={() => router.push("/admin/agendar")}
@@ -68,6 +67,7 @@ export function AdminDashboardQuickAction() {
         >
           ＋ Agendar cliente
         </button>
+        <span className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-xs font-black text-white ring-1 ring-white/15" aria-label={`${reviewClicks} aperturas de reseñas`}>{reviewClicks}</span>
       </div>
     </div>,
     target,
